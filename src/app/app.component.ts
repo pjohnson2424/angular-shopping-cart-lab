@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {Item} from './interface';
+import {CartApiService}  from './cart-api.service';
 
 @Component({
   selector: 'app-root',
