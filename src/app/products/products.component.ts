@@ -26,7 +26,7 @@ ngOnInit(): void {
 
 delete(id) {
   console.log('I WAS CLICKED!');
-  this.apiURL.deleteItem(id).subscribe(()=>{
+  this.cartService.deleteItem(id).subscribe(()=>{
     this.items.splice(id,1);
     return id;
   })
@@ -39,7 +39,7 @@ addItem(item) {
     price: item.value.price,
     quantity: item.value.quantity
   };
-  this.apiURL.addItem(newItem).subscribe(()=>{
+  this.cartService.addItem(newItem).subscribe(()=>{
     this.items.push(newItem);
     return newItem;
   })
