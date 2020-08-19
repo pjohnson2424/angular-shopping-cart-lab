@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {Response,Item} from '../interface';
-import {CartApiService} from '../cart-api.service';
+import { Component, OnInit } from '@angular/core';
+import { Item } from '../interface';
+import { CartApiService } from '../cart-api.service';
 
 @Component({
   selector: 'app-products',
@@ -8,24 +8,48 @@ import {CartApiService} from '../cart-api.service';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
-  @Input() item:any;
 
-  constructor( private cartService:CartApiService) { }
+constructor( private cartService:CartApiService) { }
 
-   ngOnInit(): void {
-     this.cartService.getAllItems(this.apiURL).subscribe((data :Response)=>{
-       this.items = data.results })
+title: string = 'Shopping Cart'
+apiURL: any= "http://localhost:3000/cart-items";
+data: Item[];
+items: Item[];
+editItemForm: boolean = false;
+newItemForm: boolean = false;
+
+ngOnInit(): void {
+     this.cartService.getAllItems().subscribe((data :Item[])=>{
+       this.items = data;
+       })
   }
 
-  title = 'Shopping-Cart - get items from API'
-  apiURL: string= 'https://localhost:3000/cart-items';
-  items: any[];
+delete(id) {
+  console.log('I WAS CLICKED!');
+  this.apiURL.deleteItem(id).subscribe(()=>{
+    this.items.splice(id,1);
+    return id;
+  })
+}
 
-/*   getAllItems():void {
-    this.cartService.getAllItems()
-    .subscribe(response => this.items = response.items);
-  } */
+addItem(item) {
+  let newItem: Item = {
+    id: this.items.length+1,
+    product: item.value.product,
+    price: item.value.price,
+    quantity: item.value.quantity
+  };
+  this.apiURL.addItem(newItem).subscribe(()=>{
+    this.items.push(newItem);
+    return newItem;
+  })
+}
 
+createForm= () => {
+  if (this.editItemForm) {
+    this.editItemForm = false;
+  }
+  (this.newItemForm) ? this.newItemForm = false : this.newItemForm = true;
+}
 
- 
 }
